@@ -189,7 +189,9 @@ def zeichne(surf, welt):
             y = d - x
             for z, material in enumerate(welt._spalten[x][y]):
                 _block(surf, welt, x, y, z, material, ox, oy)
-        while i < len(figuren) and figuren[i]._fx + figuren[i]._fy < d + 1:
+        # Figur nach der Diagonale zeichnen, die ihr Feld *oder* das Zielfeld enthält (aufrunden),
+        # sonst verdeckt beim Laufen das nächste Feld kurz die Figur.
+        while i < len(figuren) and figuren[i]._fx + figuren[i]._fy <= d + 1e-6:
             _figur(surf, figuren[i], ox, oy)
             i += 1
     while i < len(figuren):
