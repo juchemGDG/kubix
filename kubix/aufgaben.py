@@ -2,7 +2,7 @@
 
 Für Schülerinnen und Schüler sieht eine Aufgabe so aus::
 
-    from kubix import *
+    from kubix import aufgabe, pruefe
 
     figur = aufgabe(1)      # baut die Welt für Aufgabe 1 auf und zeigt den Auftrag
 
@@ -51,7 +51,7 @@ class Aufgabe:
 
     def vorlage(self):
         return (
-            "from kubix import *\n\n"
+            "from kubix import aufgabe, pruefe\n\n"
             f"figur = aufgabe({self.nr})\n\n"
             "# Dein Programm:\n\n\n"
             "pruefe()\n"
@@ -335,7 +335,7 @@ def arbeitsblatt(a, mit_loesung=False):
         teile += [f"> [!tip] Tipp", f"> {t}", ""]
     teile += ["Wenn du fertig bist, prüft `pruefe()` dein Ergebnis.", ""]
     if mit_loesung:
-        teile += ["> [!loesung]- Lösung (Lehrkräfte)", "> ```python", "> from kubix import *",
+        teile += ["> [!loesung]- Lösung (Lehrkräfte)", "> ```python", "> from kubix import aufgabe, pruefe",
                   f"> figur = aufgabe({a.nr})", ">"]
         teile += [f"> {z}" if z else ">" for z in a.loesung.rstrip("\n").splitlines()]
         teile += ["> ", "> pruefe()", "> ```", ""]

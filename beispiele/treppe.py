@@ -1,4 +1,4 @@
-from kubix import *
+from kubix import Welt, Figur
 
 welt = Welt(10, 10)
 figur = Figur(welt)

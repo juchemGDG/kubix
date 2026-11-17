@@ -1,6 +1,6 @@
 """kubix – Programmieren lernen mit einer Figur in einer Würfelwelt.
 
-    from kubix import *
+    from kubix import Figur
     figur = Figur()
     figur.gehe(3)
 """
@@ -13,7 +13,7 @@ from .figur import Figur
 from .render import MATERIALIEN
 from .welt import Welt, standard_welt
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["Welt", "Figur", "KubixFehler", "MATERIALIEN", "pause", "fertig", "aufgabe", "pruefe"]
 
 

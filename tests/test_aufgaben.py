@@ -50,10 +50,10 @@ def test_pruefe_ohne_aufgabe():
 
 def test_pruefe_im_echten_programm(tmp_path):
     prog = tmp_path / "p.py"
-    prog.write_text("from kubix import *\nfigur = aufgabe(1)\nfigur.gehe(4)\npruefe()\n")
+    prog.write_text("from kubix import aufgabe, pruefe\nfigur = aufgabe(1)\nfigur.gehe(4)\npruefe()\n")
     r = subprocess.run([sys.executable, str(prog)], capture_output=True, text=True)
     assert "✓ Aufgabe 1 geschafft" in r.stdout, r.stdout + r.stderr
-    prog.write_text("from kubix import *\nfigur = aufgabe(1)\nfigur.gehe(2)\npruefe()\n")
+    prog.write_text("from kubix import aufgabe, pruefe\nfigur = aufgabe(1)\nfigur.gehe(2)\npruefe()\n")
     r = subprocess.run([sys.executable, str(prog)], capture_output=True, text=True)
     assert "Noch nicht ganz" in r.stdout and "(2|0)" in r.stdout
 

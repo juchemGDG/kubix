@@ -6,7 +6,7 @@ von oben nach unten, das Fenster zeigt, was passiert. Alle Befehle und
 Fehlermeldungen sind deutsch.
 
 ```python
-from kubix import *
+from kubix import Figur
 
 figur = Figur()
 figur.gehe(3)
