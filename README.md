@@ -79,8 +79,10 @@ befehl = [sys.executable, "-m", "pip", "install", "--upgrade", URL]
 if sys.prefix == sys.base_prefix:      # keine virtuelle Umgebung → ins Benutzerverzeichnis
     befehl.insert(4, "--user")
 if subprocess.run(befehl).returncode == 0:
-    import importlib.metadata
-    print("✓ kubix", importlib.metadata.version("kubix"), "ist installiert.")
+    # In einem frischen Python nachsehen: Das laufende Python findet ein eben
+    # erst installiertes Paket manchmal noch nicht (bis zum Neustart).
+    subprocess.run([sys.executable, "-c",
+                    "import kubix; print('✓ kubix', kubix.__version__, 'ist installiert.')"])
 else:
     print("✗ Die Installation hat nicht geklappt – siehe „Wenn es nicht klappt“ in der README.")
 ```
