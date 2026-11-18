@@ -15,15 +15,16 @@ figur.baue("stein")
 figur.sage("Fertig!")
 ```
 
-## Installation
+## Installation und Aktualisierung
+
+Siehe [Installation in Koalino und Thonny](#installation-in-koalino-und-thonny) weiter unten.
+Kurz: kubix wird direkt von GitHub installiert (es ist nicht auf PyPI):
 
 ```
-pip install kubix
+pip install --upgrade https://github.com/juchemGDG/kubix/archive/refs/heads/main.zip
 ```
 
-(In Koalino: *Python → Pakete installieren (pip)*.)
-
-## Befehle (Stand 0.1)
+## Befehle (Stand 0.3)
 
 | Befehl | Wirkung |
 |---|---|
@@ -33,11 +34,16 @@ pip install kubix
 | `drehe_links()`, `drehe_rechts()` | Drehung um 90° |
 | `baue(material)` | Block auf das Feld vor der Figur |
 | `baue_ab()` | Obersten Block vor der Figur wegnehmen |
+| `schiebe()` | Einen einzelnen Holzblock vor der Figur ein Feld weiterschieben (die Figur bleibt stehen) |
 | `sage(text, sekunden)` | Sprechblase |
 | `vorne_frei()`, `hoehe_vorne()`, `material_vorne()` | Abfragen für Verzweigungen und Schleifen |
 | `welt.stapel(x, y, material, anzahl)` | Welt gestalten |
 | `welt.fuelle(material)` | Boden der ganzen Welt setzen |
 | `welt.screenshot("bild.png")` | Bild speichern (geht auch ohne Fenster) |
+
+`schiebe()` meldet einen Fehler, wenn vor der Figur kein Block oder mehr als ein
+Block liegt, wenn der Block nicht aus Holz ist oder wenn dahinter kein Platz ist.
+Holz schwimmt: Auf Wasser geschoben wird es zu einem Floß.
 
 Materialien: gras, erde, stein, sand, holz, ziegel, schnee, gold, wasser.
 Blickrichtungen: norden (rechts oben), osten (rechts unten), sueden (links unten),
@@ -50,6 +56,72 @@ Fehlermeldungen sind in einfacher Sprache, Tippfehler bekommen einen Vorschlag
 
 `KUBIX_FENSTER=0` oder `Welt(fenster=False)` rechnet ohne Fenster (z. B. für
 Bildschirmfotos oder automatische Prüfung von Schüleraufgaben).
+
+## Eigene Aufgaben
+
+Wie man neue Aufgaben für `aufgabe(nr)` / `pruefe()` schreibt, steht in
+[docs/eigene_aufgaben.md](docs/eigene_aufgaben.md).
+
+## Installation in Koalino und Thonny
+
+kubix liegt auf GitHub, nicht auf PyPI. Installation und Aktualisierung sind
+derselbe Befehl – er holt immer den neuesten Stand von `main`. Wichtig ist nur,
+dass kubix in **das Python** kommt, mit dem der Editor die Programme startet.
+Am sichersten geht das mit diesem kleinen Programm, das man im Editor selbst
+ausführt (gleich für Windows, macOS und Linux):
+
+```python
+# kubix installieren oder aktualisieren: einfach ausführen
+import subprocess, sys
+
+URL = "https://github.com/juchemGDG/kubix/archive/refs/heads/main.zip"
+befehl = [sys.executable, "-m", "pip", "install", "--upgrade", URL]
+if sys.prefix == sys.base_prefix:      # keine virtuelle Umgebung → ins Benutzerverzeichnis
+    befehl.insert(4, "--user")
+subprocess.run(befehl)
+
+import importlib.metadata
+print("kubix", importlib.metadata.version("kubix"), "ist installiert.")
+```
+
+Danach prüfen, welche Version läuft: `import kubix; print(kubix.__version__)`.
+
+### Koalino (Windows, macOS, Linux)
+
+- **Erstinstallation:** In den fertigen Koalino-Downloads ist kubix schon
+  enthalten (Menü *Python → kubix-Aufgaben*). Fehlt es – z. B. weil in den
+  Einstellungen ein anderes Python gewählt ist –, das Programm oben in Koalino
+  in eine neue Datei kopieren und mit ▶ ausführen.
+- **Aktualisieren:** Dasselbe Programm erneut ausführen. Es installiert in das
+  Python, das unter *Einstellungen → Python-Interpreter* gewählt ist.
+
+### Thonny (Windows, macOS, Linux)
+
+- **Mit dem Programm oben:** in Thonny in eine neue Datei kopieren, ▶ drücken.
+  Danach *Ausführen → Backend stoppen/neu starten* (Strg+F2 bzw. ⌘F2), damit
+  Thonny die neue Fassung lädt. Zum Aktualisieren genauso.
+- **Oder über die Kommandozeile von Thonny:** *Extras → Systemkommandozeile
+  öffnen …* und dort eingeben:
+
+  ```
+  pip install --upgrade https://github.com/juchemGDG/kubix/archive/refs/heads/main.zip
+  ```
+
+  Diese Kommandozeile benutzt automatisch das Python von Thonny.
+- **Ohne Kommandozeile:** auf GitHub *Code → Download ZIP* wählen, dann in
+  Thonny *Extras → Pakete verwalten …* und dort über den Link zum Installieren
+  aus einer lokalen Datei die heruntergeladene ZIP-Datei auswählen. Für ein
+  Update eine neue ZIP-Datei herunterladen und genauso installieren.
+
+### Wenn es nicht klappt
+
+| Meldung | Lösung |
+|---|---|
+| `No module named 'kubix'` | kubix ist in einem anderen Python installiert als dem, das der Editor benutzt. Das Programm oben **im Editor** ausführen. |
+| `externally-managed-environment` (vor allem Linux) | Das System-Python darf nicht verändert werden. In Thonny unter *Extras → Optionen → Interpreter* Thonnys eigenes Python oder eine virtuelle Umgebung wählen; in Koalino die mitgelieferte Runtime wählen. |
+| `Failed to build pygame` | Für sehr neue Python-Versionen gibt es pygame manchmal noch nicht fertig. Python 3.13 oder älter verwenden. |
+| Alte Befehle trotz Update (Thonny) | Backend neu starten (Strg+F2 / ⌘F2). |
+| Fehler beim Herunterladen | Internetverbindung bzw. Schul-Proxy prüfen; GitHub muss erreichbar sein. |
 
 ## Urheberrecht
 

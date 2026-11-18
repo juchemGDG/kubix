@@ -60,6 +60,60 @@ def test_abbauen(welt):
     assert welt.hoehe(1, 0) == 1
 
 
+def test_schieben(welt):
+    f = Figur(welt)
+    welt.stapel(1, 0, "holz")
+    f.schiebe()
+    assert welt.hoehe(1, 0) == 1 and welt.material(2, 0) == "holz" and welt.hoehe(2, 0) == 2
+    assert (f.x, f.y) == (0, 0)          # die Figur bleibt stehen
+    f.gehe()
+    f.schiebe()
+    assert welt.material(3, 0) == "holz" and welt.hoehe(2, 0) == 1
+
+
+def test_schieben_fehler(welt):
+    f = Figur(welt)
+    with pytest.raises(KubixFehler, match="kein Block"):
+        f.schiebe()
+    welt.stapel(1, 0, "holz", 2)
+    with pytest.raises(KubixFehler, match="2 Blöcke übereinander"):
+        f.schiebe()
+    assert welt.hoehe(1, 0) == 3         # bei einem Fehler ändert sich nichts
+    welt._spalten[1][0] = ["gras", "stein"]
+    with pytest.raises(KubixFehler, match="nur Blöcke aus Holz"):
+        f.schiebe()
+    welt._spalten[1][0] = ["gras", "holz"]
+    welt.stapel(2, 0, "stein")
+    with pytest.raises(KubixFehler, match="kein Platz"):
+        f.schiebe()
+    welt._spalten[2][0] = ["gras"]
+    Figur(welt, 2, 0)
+    with pytest.raises(KubixFehler, match="steht jemand"):
+        f.schiebe()
+
+
+def test_schieben_am_rand_und_aufs_wasser():
+    w = Welt(3, 1, fenster=False)
+    f = Figur(w)
+    w.stapel(1, 0, "holz")
+    w._spalten[2][0] = ["wasser"]
+    f.schiebe()                          # Holz schwimmt: ein Floß
+    assert w.material(2, 0) == "holz"
+    f.gehe()
+    f.gehe()                             # über das Floß gehen
+    assert f.x == 2
+    f.drehe_links(); f.drehe_links()
+    w.stapel(1, 0, "holz")
+    with pytest.raises(KubixFehler, match="steht zu hoch"):
+        f.schiebe()
+    f2 = Figur(w, 1, 0)
+    w._spalten[1][0] = ["gras"]
+    w.stapel(0, 0, "holz")
+    f2.drehe_links(); f2.drehe_links()
+    with pytest.raises(KubixFehler, match="Welt zu Ende"):
+        f2.schiebe()
+
+
 def test_max_hoehe():
     w = Welt(3, 3, max_hoehe=2, fenster=False)
     f = Figur(w)

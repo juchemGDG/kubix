@@ -38,7 +38,7 @@ def test_falsche_zahl_bei_stufen():
 
 
 def test_unbekannte_aufgabe():
-    with pytest.raises(A.KubixFehler, match="1 bis 8"):
+    with pytest.raises(A.KubixFehler, match=f"1 bis {len(A.AUFGABEN)}"):
         A.aufgabe(99)
 
 
@@ -77,7 +77,7 @@ def test_export_ueberschreibt_schuelerarbeit_nie(tmp_path):
 def test_cli(tmp_path):
     r = subprocess.run([sys.executable, "-m", "kubix", "liste"], capture_output=True, text=True)
     daten = json.loads(r.stdout)
-    assert len(daten) == 8 and daten[0]["titel"] == "Erste Schritte"
+    assert len(daten) == len(A.AUFGABEN) and daten[0]["titel"] == "Erste Schritte"
     r = subprocess.run([sys.executable, "-m", "kubix", "export", "2", str(tmp_path)],
                        capture_output=True, text=True)
     pfade = json.loads(r.stdout)

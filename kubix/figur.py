@@ -145,6 +145,43 @@ class Figur:
         self.welt._frame()
         self.welt._animiere(0.2, lambda t: None)
 
+    def schiebe(self):
+        """Schiebt einen einzelnen Holzblock vor der Figur ein Feld weiter.
+
+        Die Figur selbst bleibt stehen. Der Block muss allein auf dem Boden
+        liegen und aus Holz sein; dahinter muss das Feld frei sein (nur Boden).
+        Holz schwimmt – auf Wasser geschoben wird es zu einem Floß.
+        """
+        nx, ny = self._vorne()
+        if not self.welt.im_raster(nx, ny):
+            raise KubixFehler(f"{self.name} kann nichts schieben. Hier ist die Welt zu Ende.")
+        spalte = self.welt._spalten[nx][ny]
+        bloecke = len(spalte) - 1                      # ohne den Boden
+        if bloecke == 0:
+            raise KubixFehler(f"{self.name} kann nichts schieben. Vor {self.name} liegt kein Block.")
+        if bloecke > 1:
+            raise KubixFehler(
+                f"{self.name} kann nicht schieben. Dort liegen {bloecke} Blöcke übereinander – "
+                f"{self.name} kann nur einen einzelnen Block schieben.")
+        if spalte[-1] != "holz":
+            raise KubixFehler(
+                f"{self.name} kann nicht schieben. Der Block ist aus „{spalte[-1]}“ – "
+                f"{self.name} kann nur Blöcke aus Holz („holz“) schieben.")
+        if self.hoehe_hier() > 1:
+            raise KubixFehler(
+                f"{self.name} kann nicht schieben. {self.name} steht zu hoch und kommt nicht an den Block.")
+        dx, dy = _SCHRITT[self._richtung]
+        zx, zy = nx + dx, ny + dy
+        if not self.welt.im_raster(zx, zy):
+            raise KubixFehler(f"{self.name} kann nicht schieben. Hinter dem Block ist die Welt zu Ende.")
+        if len(self.welt._spalten[zx][zy]) > 1:
+            raise KubixFehler(f"{self.name} kann nicht schieben. Hinter dem Block ist kein Platz.")
+        if any((f.x, f.y) == (zx, zy) for f in self.welt.figuren):
+            raise KubixFehler(f"{self.name} kann nicht schieben. Hinter dem Block steht jemand.")
+        self.welt._spalten[zx][zy].append(spalte.pop())
+        self.welt._frame()
+        self.welt._animiere(0.25, lambda t: None)
+
     def sage(self, text, sekunden=2):
         """Eine Sprechblase über der Figur."""
         self._gesagt.append(str(text))
