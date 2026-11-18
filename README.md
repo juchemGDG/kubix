@@ -78,10 +78,11 @@ URL = "https://github.com/juchemGDG/kubix/archive/refs/heads/main.zip"
 befehl = [sys.executable, "-m", "pip", "install", "--upgrade", URL]
 if sys.prefix == sys.base_prefix:      # keine virtuelle Umgebung → ins Benutzerverzeichnis
     befehl.insert(4, "--user")
-subprocess.run(befehl)
-
-import importlib.metadata
-print("kubix", importlib.metadata.version("kubix"), "ist installiert.")
+if subprocess.run(befehl).returncode == 0:
+    import importlib.metadata
+    print("✓ kubix", importlib.metadata.version("kubix"), "ist installiert.")
+else:
+    print("✗ Die Installation hat nicht geklappt – siehe „Wenn es nicht klappt“ in der README.")
 ```
 
 Danach prüfen, welche Version läuft: `import kubix; print(kubix.__version__)`.
@@ -119,7 +120,7 @@ Danach prüfen, welche Version läuft: `import kubix; print(kubix.__version__)`.
 |---|---|
 | `No module named 'kubix'` | kubix ist in einem anderen Python installiert als dem, das der Editor benutzt. Das Programm oben **im Editor** ausführen. |
 | `externally-managed-environment` (vor allem Linux) | Das System-Python darf nicht verändert werden. In Thonny unter *Extras → Optionen → Interpreter* Thonnys eigenes Python oder eine virtuelle Umgebung wählen; in Koalino die mitgelieferte Runtime wählen. |
-| `Failed to build pygame` | Für sehr neue Python-Versionen gibt es pygame manchmal noch nicht fertig. Python 3.13 oder älter verwenden. |
+| `Failed to build pygame` | Eine alte kubix-Fassung (vor 0.3.1) wollte unter Python 3.14 pygame selbst kompilieren. Das Programm oben erneut ausführen: Ab 0.3.1 wird dort automatisch **pygame-ce** installiert (gleiche Befehle, `import pygame` funktioniert genauso). |
 | Alte Befehle trotz Update (Thonny) | Backend neu starten (Strg+F2 / ⌘F2). |
 | Fehler beim Herunterladen | Internetverbindung bzw. Schul-Proxy prüfen; GitHub muss erreichbar sein. |
 

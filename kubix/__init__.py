@@ -13,7 +13,7 @@ from .figur import Figur
 from .render import MATERIALIEN
 from .welt import Welt, standard_welt
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __all__ = ["Welt", "Figur", "KubixFehler", "MATERIALIEN", "pause", "fertig", "aufgabe", "pruefe"]
 
 

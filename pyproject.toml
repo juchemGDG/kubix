@@ -4,12 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kubix"
-version = "0.3.0"
+version = "0.3.1"
 description = "Einfach programmieren lernen: eine Figur baut und erkundet eine Würfelwelt (Python für Einsteiger, Klasse 8)."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-dependencies = ["pygame>=2.5"]
+# pygame hat (noch) keine fertigen Pakete für Python 3.14 – pip müsste es dann selbst
+# kompilieren, was z. B. mit Thonnys Python unter Windows scheitert. pygame-ce ist eine
+# kompatible Fortführung (ebenfalls „import pygame“) mit Paketen für neue Versionen.
+# Beide nie gleichzeitig installieren: sie belegen denselben Ordner „pygame“.
+dependencies = [
+    "pygame>=2.5; python_version < '3.14'",
+    "pygame-ce>=2.5.6; python_version >= '3.14'",
+]
 
 [tool.setuptools]
 packages = ["kubix"]
